@@ -27,6 +27,7 @@ class ResetPasswordController extends Controller
     {
         return view('admin.auth.passwords.reset', [
             'token' => $token,
+            'email' => $request->email
         ]);
     }
 

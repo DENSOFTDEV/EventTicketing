@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\MessageBag;
+use Illuminate\Support\Facades\Input;
 
 class LoginController extends Controller
 {
@@ -92,9 +94,11 @@ class LoginController extends Controller
 
     private function loginFailed()
     {
+        $errors = new MessageBag(['password' => ['Invalid Email or Password']]);
         return redirect()
             ->back()
-            ->withInput()
+            ->withErrors($errors)
+            ->withInput(['email'])
             ->with('error', 'Login failed, please try again!');
     }
 }
