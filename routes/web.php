@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\Auth\ForgotPasswordController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
+use App\Http\Controllers\Admin\EventsController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -47,6 +49,8 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
 
     Route::middleware('auth:admin')->group(function () {
         Route::view('/', 'admin.home')->name('home');
+        Route::get('/events', [EventsController::class, 'index'])->name('events');
+        Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
     });
 });
 
