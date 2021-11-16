@@ -16,12 +16,13 @@ class CreateEventsTable extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('hashTag');
             $table->string('poster');
             $table->unsignedBigInteger('location');
             $table->string('venue');
-            $table->json('prices');
-            $table->json('reservation');
-            $table->dateTime('happening_date');
+            $table->string('duration');
+            $table->date('happening_date');
+            $table->time('happening_time');
             $table->timestamps();
         });
     }

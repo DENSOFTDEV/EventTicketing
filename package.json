@@ -26,6 +26,7 @@
     },
     "dependencies": {
         "bootstrap-vue": "^2.21.2",
+        "element-ui": "^2.15.6",
         "vee-validate": "^3.4.14"
     }
 }

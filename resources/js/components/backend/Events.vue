@@ -9,55 +9,107 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <div class="float-right mb-2">
-                                <b-button-group size="sm">
-                                    <b-button variant="success">
-                                        <b-icon icon="arrow-clockwise"></b-icon>
-                                        Refresh
-                                    </b-button>
-                                    <b-button variant="primary" @click="openAddEventModal">
-                                        <b-icon icon="plus"></b-icon>
-                                        Add Event
-                                    </b-button>
-                                </b-button-group>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="float-right">
+                                        <b-button-group size="sm">
+                                            <b-button variant="success" @click="getEvents">
+                                                <b-icon icon="arrow-clockwise"></b-icon>
+                                                Refresh
+                                            </b-button>
+                                            <b-button variant="primary" @click="addEvent">
+                                                <b-icon icon="plus"></b-icon>
+                                                Add Event
+                                            </b-button>
+                                        </b-button-group>
+                                    </div>
+                                </div>
                             </div>
-                            <b-table
-                                foot-clone
-                                :items="recipes"
-                                :fields="fields"
-                                responsive="sm"
-                                :per-page="perPage"
-                                show-empty
-                                empty-text="There no events Found"
-                                :current-page="currentPage"
-                                primary-key="id"
-                                :busy="isBusy"
-                                :sort-desc.sync="sortDesc"
-                                :filter="filter"
-                                :bordered="true"
-                                :filter-included-fields="filterOn"
-                                @filtered="onFilteredEvents"
-                                ref="carMakeTable">
-                                <template v-slot:cell(index)="item">
-                                    {{item.index+1}}
-                                </template>
-
-                                <template v-slot:cell(image)="row">
-                                    <img class="rounded-circle avatar-xs" :src="row.value" alt=""
-                                         style="width: 50px; height: 50px;" title="click to see photo">
-                                </template>
-                                <template v-slot:table-busy>
-                                    <div class="text-center  my-2">
-                                        <b-spinner class="align-middle text-primary"></b-spinner>
-                                        <strong>Loading Events...</strong>
+                            <div class="row mt-2">
+                                <div class="col-sm-12 col-md-6">
+                                    <div id="make-table_length" class="dataTables_length">
+                                        <label class="d-inline-flex align-items-center">
+                                            Show&nbsp;
+                                            <b-form-select v-model="perPage" size="sm"
+                                                           :options="pageOptions"></b-form-select>&nbsp;entries
+                                        </label>
                                     </div>
-                                </template>
-                                <template v-slot:cell(actions)="row">
-                                    <div class="text-center">
-
+                                </div>
+                                <!-- Search -->
+                                <div class="col-sm-12 col-md-6">
+                                    <div id="make-table_filter" class="dataTables_filter text-md-right">
+                                        <label class="d-inline-flex align-items-center">
+                                            Search:
+                                            <b-form-input
+                                                v-model="filter"
+                                                type="search"
+                                                placeholder="Search..."
+                                                class="form-control form-control-sm ml-2"
+                                            ></b-form-input>
+                                        </label>
                                     </div>
-                                </template>
-                            </b-table>
+                                </div>
+                                <!-- End search -->
+                            </div>
+                            <!-- Table -->
+                            <div class="table-responsive mb-0">
+                                <b-table
+                                    foot-clone
+                                    :items="events"
+                                    :fields="fields"
+                                    responsive="sm"
+                                    :per-page="perPage"
+                                    show-empty
+                                    empty-text="There no events Found"
+                                    :current-page="currentPage"
+                                    primary-key="id"
+                                    :busy="isBusy"
+                                    :sort-desc.sync="sortDesc"
+                                    :filter="filter"
+                                    :bordered="true"
+                                    :filter-included-fields="filterOn"
+                                    @filtered="onFilteredEvents"
+                                    ref="carMakeTable">
+                                    <template v-slot:cell(index)="item">
+                                        {{item.index+1}}
+                                    </template>
+
+                                    <template v-slot:cell(location)="data">
+                                        {{data.value.name}}
+                                    </template>
+
+                                    <template v-slot:cell(image)="row">
+                                        <img class="rounded-circle avatar-xs" :src="row.value" alt=""
+                                             style="width: 50px; height: 50px;" title="click to see photo">
+                                    </template>
+                                    <template v-slot:table-busy>
+                                        <div class="text-center  my-2">
+                                            <b-spinner class="align-middle text-primary"></b-spinner>
+                                            <strong>Loading Events...</strong>
+                                        </div>
+                                    </template>
+                                    <template v-slot:cell(actions)="row">
+                                        <div class="text-center">
+                                            <b-dropdown size="sm" text="Actions" class="m-2">
+                                                <b-dropdown-item-button>Edit</b-dropdown-item-button>
+                                                <b-dropdown-item-button>View</b-dropdown-item-button>
+                                                <b-dropdown-item-button>Delete</b-dropdown-item-button>
+                                            </b-dropdown>
+                                        </div>
+                                    </template>
+                                </b-table>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="dataTables_paginate paging_simple_numbers float-right">
+                                        <ul class="pagination pagination-rounded mb-0">
+                                            <!-- pagination -->
+                                            <b-pagination v-model="currentPage" :total-rows="rows"
+                                                          :per-page="perPage"></b-pagination>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -66,35 +118,6 @@
             </div>
             <!-- /.row -->
         </div>
-
-        <!--  add event modal-->
-        <ValidationObserver ref="addEventObserver" v-slot="{ handleSubmit }">
-            <b-modal ref="addEvent" centered title="Add Event" :no-close-on-backdrop="true"
-                     @ok.prevent="handleSubmit(addEvent)" @show="resetModal" @hidden="resetModal">
-                <ValidationProvider rules="required|email" name="Email" v-slot="{ valid, errors }">
-                    <b-form-group
-                        label="Name:"
-                    >
-                        <b-form-input
-                            type="email"
-                            v-model="form.name"
-                            :state="errors[0] ? false : (valid ? true : null)"
-                            placeholder="Enter Name"
-                        ></b-form-input>
-                        <b-form-invalid-feedback id="inputLiveFeedback">{{ errors[0] }}</b-form-invalid-feedback>
-                    </b-form-group>
-                </ValidationProvider>
-
-                <template v-slot:modal-footer="{ ok, cancel}">
-                    <b-button size="sm" variant="danger" @click="cancel()">
-                        Cancel
-                    </b-button>
-                    <b-button size="sm" variant="primary" @click="ok()">
-                        Add
-                    </b-button>
-                </template>
-            </b-modal>
-        </ValidationObserver>
         <!-- /.container-fluid -->
     </section>
 </template>
@@ -104,7 +127,6 @@
         name: "Events",
         data() {
             return {
-                form: {name: '', image: '', location: '', happening_date: ''},
                 isBusy: false,
                 fields: [
                     {
@@ -146,23 +168,27 @@
                 filter: null,
                 filterOn: [],
                 sortDesc: false,
-                recipes: [],
+                events: [],
             }
         },
         computed: {
             rows() {
-                return this.recipes.length;
+                return this.events.length;
             },
         },
+        mounted() {
+            this.getEvents();
+        },
         methods: {
-            openAddEventModal() {
-                this.$refs['addEvent'].show();
+            getEvents() {
+                this.isBusy = true;
+                axios.get('/admin/get-events').then((response) => {
+                    this.isBusy = false;
+                    this.events = response.data;
+                })
             },
             addEvent() {
-
-            },
-            resetModal() {
-
+                window.location.href = '/admin/add-event'
             },
             onFilteredEvents(filteredItems) {
                 this.totalRows = filteredItems.length;

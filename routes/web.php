@@ -5,7 +5,9 @@ use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\EventsController;
+use App\Http\Controllers\Admin\LocationsController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\TicketTypeController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -50,7 +52,21 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::view('/', 'admin.home')->name('home');
         Route::get('/events', [EventsController::class, 'index'])->name('events');
+        Route::get('/get-events', [EventsController::class, 'getEvents']);
+        Route::get('/add-event', [EventsController::class, 'addEvent']);
+        Route::post('/store-event', [EventsController::class, 'storeEvent']);
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
+        Route::post('/update-settings', [SettingsController::class, 'updateSettings']);
+        //ticket types
+        Route::get('/get-ticket-types', [TicketTypeController::class, 'index']);
+        Route::post('/add-ticket-type', [TicketTypeController::class, 'store']);
+        Route::post('/update-ticket-type/{id}', [TicketTypeController::class, 'update']);
+        Route::get('/delete-ticket-type/{id}', [TicketTypeController::class, 'delete']);
+        //locations
+        Route::get('/get-locations', [LocationsController::class, 'index']);
+        Route::post('/add-location', [LocationsController::class, 'store']);
+        Route::post('/update-location/{id}', [LocationsController::class, 'update']);
+        Route::get('/delete-location/{id}', [LocationsController::class, 'delete']);
     });
 });
 
