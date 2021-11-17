@@ -74,14 +74,36 @@
                                         {{item.index+1}}
                                     </template>
 
+                                    <template v-slot:cell(prices)="data">
+                                        <ul style="list-style-type: none">
+                                            <li v-for="price in data.item.ticket_prices">
+                                                {{price.ticket.name}} {{price.price}}
+                                            </li>
+                                        </ul>
+                                    </template>
+
+                                    <template v-slot:cell(reservation)="data">
+                                        <ul style="list-style-type: none">
+                                            <li v-for="price in data.item.ticket_prices">
+                                                {{price.ticket.name}} {{price.reservation_no}}
+                                            </li>
+                                        </ul>
+                                    </template>
+
                                     <template v-slot:cell(location)="data">
                                         {{data.value.name}}
                                     </template>
 
-                                    <template v-slot:cell(image)="row">
-                                        <img class="rounded-circle avatar-xs" :src="row.value" alt=""
-                                             style="width: 50px; height: 50px;" title="click to see photo">
+                                    <template v-slot:cell(created_at)="data">
+                                        {{moment(data.value).format("MMMM Do YYYY")}}
                                     </template>
+
+                                    <template v-slot:cell(happening_date)="data">
+                                        {{moment(`${data.item.happening_date}
+                                        ${data.item.happening_time}`).fromNow()}}
+                                    </template>
+
+
                                     <template v-slot:table-busy>
                                         <div class="text-center  my-2">
                                             <b-spinner class="align-middle text-primary"></b-spinner>

@@ -21,6 +21,11 @@ class Event extends Model
         return $this->belongsTo(Location::class, 'location');
     }
 
+    public function ticket_prices()
+    {
+        return $this->hasMany(TicketPricing::class, 'event_id');
+    }
+
 
     public function getPosterUrlAttribute()
     {

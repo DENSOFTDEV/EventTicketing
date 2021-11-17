@@ -24,7 +24,7 @@ class EventsController extends Controller
 
     public function getEvents()
     {
-        $events = Event::with('location')->get();
+        $events = Event::with('location', 'ticket_prices.ticket')->get();
 
         return $this->showall($events);
     }
