@@ -143,8 +143,8 @@
                             </p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
+                    <li class="nav-item {{ (request()->is('admin/users/*')) ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link {{ (request()->is('admin/users/*')) ? 'active' : '' }}">
                             <i class="nav-icon fas fa-user-circle"></i>
                             <p>
                                 Users
@@ -153,13 +153,15 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="pages/charts/chartjs.html" class="nav-link">
+                                <a href="{{route('admin.staff')}}"
+                                   class="nav-link {{ (request()->is('admin/users/staff')) ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Staff</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="pages/charts/flot.html" class="nav-link">
+                                <a href="{{route('admin.users')}}"
+                                   class="nav-link {{ (request()->is('admin/users/customers')) ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Customers</p>
                                 </a>
@@ -176,7 +178,8 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="pages/widgets.html" class="nav-link">
+                        <a href="{{route('admin.payments')}}"
+                           class="nav-link {{ (request()->is('admin/payments')) ? 'active' : '' }}">
                             <i class="nav-icon fas fa-credit-card"></i>
                             <p>
                                 Payments
@@ -247,7 +250,6 @@
 <script src="{{asset('backend/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('backend/dist/js/adminlte.js')}}"></script>
-
 
 
 </body>

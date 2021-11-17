@@ -6,9 +6,11 @@ use App\Http\Controllers\Admin\Auth\RegisterController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\EventsController;
 use App\Http\Controllers\Admin\LocationsController;
+use App\Http\Controllers\Admin\PaymentsController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\TicketPricingController;
 use App\Http\Controllers\Admin\TicketTypeController;
+use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -52,6 +54,9 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
 
     Route::middleware('auth:admin')->group(function () {
         Route::view('/', 'admin.home')->name('home');
+        //users
+        Route::get('/users/staff', [UsersController::class, 'staff'])->name('staff');
+        Route::get('/users/customers', [UsersController::class, 'users'])->name('users');
         //events
         Route::get('/events', [EventsController::class, 'index'])->name('events');
         Route::get('/get-events', [EventsController::class, 'getEvents']);
@@ -81,6 +86,9 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
         Route::post('/add-location', [LocationsController::class, 'store']);
         Route::post('/update-location/{id}', [LocationsController::class, 'update']);
         Route::get('/delete-location/{id}', [LocationsController::class, 'delete']);
+
+        //payments
+        Route::get('/payments', [PaymentsController::class, 'index'])->name('payments');
     });
 });
 
