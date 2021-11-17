@@ -18,6 +18,7 @@ class CreateTicketPricingsTable extends Migration
             $table->unsignedBigInteger('event_id');
             $table->unsignedBigInteger('ticket_id');
             $table->string('price');
+            $table->string('reservation_no');
             $table->timestamps();
         });
     }

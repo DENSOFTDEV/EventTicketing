@@ -88,12 +88,26 @@
                                             <strong>Loading Events...</strong>
                                         </div>
                                     </template>
-                                    <template v-slot:cell(actions)="row">
+                                    <template v-slot:cell(actions)="data">
                                         <div class="text-center">
                                             <b-dropdown size="sm" text="Actions" class="m-2">
-                                                <b-dropdown-item-button>Edit</b-dropdown-item-button>
-                                                <b-dropdown-item-button>View</b-dropdown-item-button>
-                                                <b-dropdown-item-button>Delete</b-dropdown-item-button>
+                                                <b-dropdown-item-button>
+                                                    <a
+                                                        style="text-decoration: none"
+                                                        :href="'/admin/edit-event/'+data.item.id">
+                                                        Edit
+                                                    </a>
+                                                </b-dropdown-item-button>
+                                                <b-dropdown-item-button>
+                                                    <a
+                                                        style="text-decoration: none"
+                                                        :href="'/admin/view-event/'+data.item.id">
+                                                        View
+                                                    </a>
+                                                </b-dropdown-item-button>
+                                                <b-dropdown-item-button @click="deleteEvent(data.item)">
+                                                    Delete
+                                                </b-dropdown-item-button>
                                             </b-dropdown>
                                         </div>
                                     </template>
@@ -180,6 +194,43 @@
             this.getEvents();
         },
         methods: {
+            deleteEvent(event) {
+                this.$confirm(`${event.name} event will be permanently deleted. Continue?`, 'Warning', {
+                    confirmButtonText: 'OK',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning'
+                }).then(() => {
+
+                    axios.get(`/admin/delete-event/${event.id}`)
+                        .then((response) => {
+
+                            let deletedId = response.data.id;
+
+                            this.events = this.events.filter(event => event.id !== deletedId);
+
+                            this.$notify({
+                                title: 'Success',
+                                message: 'Event Deleted Successfully',
+                                type: 'success'
+                            });
+
+                        }).catch(() => {
+
+                        this.$notify({
+                            title: 'Warning',
+                            message: 'Something went wrong',
+                            type: 'warning'
+                        })
+                    })
+
+
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: 'Delete canceled'
+                    });
+                });
+            },
             getEvents() {
                 this.isBusy = true;
                 axios.get('/admin/get-events').then((response) => {

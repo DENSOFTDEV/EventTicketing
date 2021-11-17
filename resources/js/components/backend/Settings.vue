@@ -186,12 +186,12 @@
         <ValidationObserver ref="editTicketTypeObserver" v-slot="{ handleSubmit }">
             <b-modal ref="editTicketModal" size="sm" centered title="Update Ticket" :no-close-on-backdrop="true"
                      @ok.prevent="handleSubmit(updateTicket)" @hidden="resetModal">
-                <ValidationProvider rules="required" name="Email" v-slot="{ valid, errors }">
+                <ValidationProvider rules="required" name="Name" v-slot="{ valid, errors }">
                     <b-form-group
                         label="Name:"
                     >
                         <b-form-input
-                            type="email"
+                            type="text"
                             v-model="selectedTicket.name"
                             :state="errors[0] ? false : (valid ? true : null)"
                             placeholder="Enter Name"
@@ -215,12 +215,12 @@
         <ValidationObserver ref="editLocationObserver" v-slot="{ handleSubmit }">
             <b-modal ref="editLocationModal" size="sm" centered title="Update Ticket" :no-close-on-backdrop="true"
                      @ok.prevent="handleSubmit(updateLocation)" @hidden="resetEditLocationModal">
-                <ValidationProvider rules="required" name="Email" v-slot="{ valid, errors }">
+                <ValidationProvider rules="required" name="Name" v-slot="{ valid, errors }">
                     <b-form-group
                         label="Name:"
                     >
                         <b-form-input
-                            type="email"
+                            type="text"
                             v-model="selectedLocation.name"
                             :state="errors[0] ? false : (valid ? true : null)"
                             placeholder="Enter Name"

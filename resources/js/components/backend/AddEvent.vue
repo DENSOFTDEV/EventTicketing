@@ -10,7 +10,7 @@
                         <!-- /.card-header -->
                         <div class="card-body">
                             <ValidationObserver ref="addEventObserver" v-slot="{ handleSubmit }">
-                                <b-form title="Add Event" @submit.prevent="handleSubmit(addEvent)">
+                                <b-form @submit.prevent="handleSubmit(addEvent)">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <ValidationProvider rules="required" name="Name"
@@ -125,7 +125,7 @@
                                                 >
                                                     <b-form-datepicker
                                                         id="example-datepicker"
-                                                        v-model="form.happeningDate"
+                                                        v-model="form.happening_date"
                                                         :state="errors[0] ? false : (valid ? true : null)"
                                                         :min="min"
                                                         :max="max"
@@ -149,7 +149,7 @@
                                                     label="Happening Time:"
                                                 >
                                                     <b-form-timepicker
-                                                        v-model="form.happeningTime"
+                                                        v-model="form.happening_time"
                                                         :state="errors[0] ? false : (valid ? true : null)"
                                                         locale="en"
                                                     >
@@ -179,7 +179,9 @@
                                             </ValidationProvider>
                                         </div>
                                     </div>
-                                    <b-button type="submit" variant="primary" size="sm">Add Event</b-button>
+                                    <b-button type="submit" variant="primary" size="sm" :disabled="isLoading">
+                                        {{isLoading ? 'please wait...' : 'Add Event'}}
+                                    </b-button>
                                 </b-form>
                             </ValidationObserver>
                         </div>
@@ -213,14 +215,15 @@
                     file: null,
                     location: '',
                     venue: '',
-                    happeningDate: '',
-                    happeningTime: '',
+                    happening_date: '',
+                    happening_time: '',
                     duration: ''
                 },
                 min: minDate,
                 max: maxDate,
                 searchResults: [],
                 showSuggestions: false,
+                isLoading: false
             }
         },
         computed: {
@@ -244,8 +247,11 @@
         },
         methods: {
             addEvent() {
-
+                this.isLoading = true;
                 axios.post('/admin/store-event', this.form).then((response) => {
+
+                    this.isLoading = false;
+
                     this.$notify({
                         title: 'Success',
                         message: 'Event Added Successfully',
@@ -255,6 +261,9 @@
                     window.location.href = '/admin/events';
 
                 }).catch((error) => {
+
+                    this.isLoading = false;
+
                     this.$notify({
                         title: 'Warning',
                         message: 'Something went wrong',

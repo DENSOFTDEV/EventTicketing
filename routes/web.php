@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\EventsController;
 use App\Http\Controllers\Admin\LocationsController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\TicketPricingController;
 use App\Http\Controllers\Admin\TicketTypeController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
@@ -51,10 +52,23 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
 
     Route::middleware('auth:admin')->group(function () {
         Route::view('/', 'admin.home')->name('home');
+        //events
         Route::get('/events', [EventsController::class, 'index'])->name('events');
         Route::get('/get-events', [EventsController::class, 'getEvents']);
         Route::get('/add-event', [EventsController::class, 'addEvent']);
         Route::post('/store-event', [EventsController::class, 'storeEvent']);
+        Route::get('/edit-event/{id}', [EventsController::class, 'editEvent']);
+        Route::post('/update-event/{id}', [EventsController::class, 'updateEvent']);
+        Route::get('/view-event/{id}', [EventsController::class, 'viewEvent']);
+        Route::get('/delete-event/{id}', [EventsController::class, 'deleteEvent']);
+
+        //ticket pricing
+        Route::get('/ticket-prices/{id}', [TicketPricingController::class, 'index']);
+        Route::post('/store-ticket-price/{id}', [TicketPricingController::class, 'store']);
+        Route::post('/update-ticket-price/{event_id}/{id}', [TicketPricingController::class, 'update']);
+        Route::get('/delete-ticket-price/{id}', [TicketPricingController::class, 'delete']);
+
+        //general settings
         Route::get('/settings', [SettingsController::class, 'index'])->name('settings');
         Route::post('/update-settings', [SettingsController::class, 'updateSettings']);
         //ticket types

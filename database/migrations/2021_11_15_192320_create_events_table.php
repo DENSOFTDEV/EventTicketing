@@ -18,6 +18,7 @@ class CreateEventsTable extends Migration
             $table->string('name');
             $table->string('hashTag');
             $table->string('poster');
+            $table->string('large_poster');
             $table->unsignedBigInteger('location');
             $table->string('venue');
             $table->string('duration');

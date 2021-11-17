@@ -42,6 +42,10 @@ import locale from 'element-ui/lib/locale/lang/en'
 Vue.use(ElementUI, {locale});
 
 
+import moment from 'moment'
+Vue.prototype.moment = moment;
+
+
 
 
 
