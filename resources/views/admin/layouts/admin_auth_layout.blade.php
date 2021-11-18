@@ -20,7 +20,7 @@
     <!-- /.login-logo -->
     <div class="card card-outline card-primary">
         <div class="card-header text-center">
-            <a href="#" class="h1">{{env('app_name')}}</a>
+            <a href="#" class="h1">{{config('app.name')}}</a>
         </div>
     @yield('content')
     <!-- /.card-body -->
