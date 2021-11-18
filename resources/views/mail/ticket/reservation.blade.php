@@ -4,7 +4,7 @@
 Hello {{$user->name}}.
 
 You successfully reserved the following tickets for event:
-{{$event->name}} happening {{$event->date}} at {{$event->venue}}
+{{$event->name}} happening {{\Carbon\Carbon::parse($event->happening_date.' '.$event->happening_time)->isoFormat("MMM Do YYYY, h:mm:ss a")}} at {{$event->venue}}
 
 
 @component('mail::button', ['url' => $url])
