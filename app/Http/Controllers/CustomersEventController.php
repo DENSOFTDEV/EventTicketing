@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\Models\Ticket;
 use App\Models\TicketPricing;
 use App\Models\TicketType;
+use App\Notifications\TicketReservation;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -38,13 +39,22 @@ class CustomersEventController extends Controller
             'reservation_no' => 'required'
         ]);
 
+
         $user = Auth::user();
 
 
-        $remainingTickets = $this->checkMaxReservations($id);
+        $remainingTickets = $this->checkMaxReservations($id, $request->ticket_id);
+
+
+        $ticket_pricing = TicketPricing::with('ticket')->where('id', $request->ticket_id)->first();
+
+        if ($remainingTickets == 0) {
+            return $this->errorResponse('No tickets remaining for ' . $ticket_pricing->ticket->name . ' ticket');
+        }
+
 
         if ($remainingTickets < $request->reservation_no) {
-            return $this->errorResponse('You can only reserve ' . ($remainingTickets) . ' tickets');
+            return $this->errorResponse('Only ' . ($remainingTickets) . ' ticket(s) left out for ' . $ticket_pricing->ticket->name . ' ticket');
         }
 
 
@@ -52,6 +62,7 @@ class CustomersEventController extends Controller
             ['event_id', '=', $id],
             ['user_id', '=', $user->id]
         ])->get();
+
 
         $existingTicketsCount = count($tickets);
 
@@ -61,10 +72,12 @@ class CustomersEventController extends Controller
         } else {
             if (($existingTicketsCount + $request->reservation_no) > 5) {
 
-                return $this->errorResponse('You can only reserve ' . (5 - $existingTicketsCount) . ' tickets');
+                return $this->errorResponse('You can only reserve ' . (5 - $existingTicketsCount) . ' ticket(s)');
             } else {
 
                 $ticket_type = TicketPricing::find($request->ticket_id);
+
+                $tickets = collect();
 
                 for ($i = 0; $i < $request->reservation_no; $i++) {
                     $ticket = new Ticket();
@@ -74,7 +87,14 @@ class CustomersEventController extends Controller
                     $ticket->code = Str::random('10');
                     $ticket->price = $ticket_type->price;
                     $ticket->save();
+
+                    $fullTicket = Ticket::where('id', $ticket->id)->with('ticket_pricing.ticket')->first();
+
+                    $tickets->add($fullTicket);
+
                 }
+
+                $user->notify(new TicketReservation($user, $tickets, Event::find($id)));
 
                 return $this->successResponse([
                     'message' => 'Tickets reserved successfully'
@@ -84,22 +104,21 @@ class CustomersEventController extends Controller
 
     }
 
-    public function checkMaxReservations($event_id)
+    public function checkMaxReservations($event_id, $ticket_pricing_id)
     {
 
-        $ticketPricing = TicketPricing::where('event_id', $event_id)->get()->pluck('reservation_no')->toArray();
+        $ticketPricing = TicketPricing::where('id', $ticket_pricing_id)->first();
 
-        $expectedReservations = array_sum($ticketPricing);
+        $expectedReservations = $ticketPricing->reservation_no;
 
-        $reservedTickets = Ticket::where('event_id', $event_id)->get();
+        $reservedTickets = Ticket::where([
+            ['event_id', '=', $event_id],
+            ['type', '=', $ticket_pricing_id],
+        ])->get();
 
         $totalReservedTickets = count($reservedTickets);
 
-        if ($expectedReservations > $totalReservedTickets) {
-            return ($expectedReservations - $totalReservedTickets);
-        } else {
-            return $this->errorResponse('No Tickets Available');
-        }
+        return ($expectedReservations - $totalReservedTickets);
 
     }
 }
