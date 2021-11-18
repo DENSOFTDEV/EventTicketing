@@ -20,8 +20,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Admin::create([
-            'name' => 'Dennis Githinji',
-            'email' => 'wakahiad@gmail.com',
+            'name' => 'Test Admin',
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('password')
         ]);
 

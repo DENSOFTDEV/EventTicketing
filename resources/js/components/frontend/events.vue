@@ -1,7 +1,7 @@
 <template>
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
-            <div class="row">
+            <div v-if="events.length > 0" class="row">
                 <div v-for="event in events" :key="event.id" class="col-md-3 mb-5">
                     <div class="card h-100">
                         <!-- Sale badge-->
@@ -35,6 +35,9 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="text-center">
+                <h3>No Events found <span class="far fa-sad-tear fa-3x text-success"></span></h3>
             </div>
         </div>
     </section>
