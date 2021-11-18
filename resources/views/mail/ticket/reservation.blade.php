@@ -1,7 +1,6 @@
 @component('mail::message')
-# Introduction
 
-Hello {{$user->name}}.
+# Hello {{$user->name}}.
 
 You successfully reserved the following tickets for event:
 {{$event->name}} happening {{\Carbon\Carbon::parse($event->happening_date.' '.$event->happening_time)->isoFormat("MMM Do YYYY, h:mm:ss a")}} at {{$event->venue}}
