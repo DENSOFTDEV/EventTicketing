@@ -20,7 +20,7 @@
     <!-- /.login-logo -->
     <div class="card card-outline card-primary">
         <div class="card-header text-center">
-            <a href="../../index2.html" class="h1"><b>Event</b> Ticketing</a>
+            <a href="#" class="h1">{{env('app_name')}}</a>
         </div>
     @yield('content')
     <!-- /.card-body -->
