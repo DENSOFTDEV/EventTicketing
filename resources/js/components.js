@@ -20,3 +20,5 @@ Vue.component('settings', require('./components/backend/Settings').default);
 //customer
 Vue.component('customer-events', require('./components/frontend/events').default);
 Vue.component('ticket-reservation', require('./components/frontend/TicketReservation').default);
+Vue.component('customer-tickets', require('./components/frontend/tickets').default);
+Vue.component('customer-ticket-pricing', require('./components/frontend/TicketPricing').default);

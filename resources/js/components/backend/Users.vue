@@ -51,7 +51,7 @@
                             <div class="table-responsive mb-0">
                                 <b-table
                                     foot-clone
-                                    :items="users"
+                                    :items="customers"
                                     :fields="fields"
                                     responsive="sm"
                                     :per-page="perPage"
@@ -70,63 +70,20 @@
                                         {{item.index+1}}
                                     </template>
 
-                                    <template v-slot:cell(prices)="data">
-                                        <ul style="list-style-type: none">
-                                            <li v-for="price in data.item.ticket_prices">
-                                                {{price.ticket.name}} {{price.price}}
-                                            </li>
-                                        </ul>
-                                    </template>
-
-                                    <template v-slot:cell(reservation)="data">
-                                        <ul style="list-style-type: none">
-                                            <li v-for="price in data.item.ticket_prices">
-                                                {{price.ticket.name}} {{price.reservation_no}}
-                                            </li>
-                                        </ul>
-                                    </template>
-
-                                    <template v-slot:cell(location)="data">
-                                        {{data.value.name}}
+                                    <template v-slot:cell(avatar)="data">
+                                        <span class="fa fa-user fa-2x"></span>
                                     </template>
 
                                     <template v-slot:cell(created_at)="data">
                                         {{moment(data.value).format("MMMM Do YYYY")}}
                                     </template>
 
-                                    <template v-slot:cell(happening_date)="data">
-                                        {{moment(`${data.item.happening_date}
-                                        ${data.item.happening_time}`).fromNow()}}
-                                    </template>
 
 
                                     <template v-slot:table-busy>
                                         <div class="text-center  my-2">
                                             <b-spinner class="align-middle text-primary"></b-spinner>
                                             <strong>Loading Events...</strong>
-                                        </div>
-                                    </template>
-                                    <template v-slot:cell(actions)="data">
-                                        <div class="text-center">
-                                            <b-dropdown size="sm" text="Actions" class="m-2">
-                                                <b-dropdown-item-button>
-                                                    <a
-                                                        style="text-decoration: none"
-                                                        :href="'/admin/edit-event/'+data.item.id">
-                                                        Edit
-                                                    </a>
-                                                </b-dropdown-item-button>
-                                                <b-dropdown-item-button>
-                                                    <a
-                                                        style="text-decoration: none"
-                                                        :href="'/admin/view-event/'+data.item.id">
-                                                        View
-                                                    </a>
-                                                </b-dropdown-item-button>
-                                                <b-dropdown-item-button @click="deleteEvent(data.item)">
-                                                    Delete
-                                                </b-dropdown-item-button>
-                                            </b-dropdown>
                                         </div>
                                     </template>
                                 </b-table>
@@ -181,9 +138,6 @@
                         key: 'created_at',
                         label: 'Created At'
                     },
-                    {
-                        key: 'Actions'
-                    }
                 ],
                 totalRows: 1,
                 currentPage: 1,
@@ -200,9 +154,18 @@
                 return this.customers.length;
             },
         },
+        mounted() {
+            this.getCustomers();
+        },
         methods: {
             getCustomers() {
-
+                this.isBusy = true;
+                axios.get('/admin/get-users').then((response) => {
+                    this.isBusy = false;
+                    this.customers = response.data;
+                }).catch((error) => {
+                    this.isBusy = false;
+                })
             },
             onFilteredCustomer(filteredItems) {
                 this.totalRows = filteredItems.length;

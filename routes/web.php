@@ -5,9 +5,11 @@ use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
 use App\Http\Controllers\Admin\Auth\ResetPasswordController;
 use App\Http\Controllers\Admin\EventsController;
+use App\Http\Controllers\Admin\HomeController as HomeControllerAlias;
 use App\Http\Controllers\Admin\LocationsController;
 use App\Http\Controllers\Admin\PaymentsController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\TicketController;
 use App\Http\Controllers\Admin\TicketPricingController;
 use App\Http\Controllers\Admin\TicketTypeController;
 use App\Http\Controllers\Admin\UsersController;
@@ -48,6 +50,7 @@ Auth::routes();
 Route::middleware('auth')->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/tickets', [HomeController::class, 'tickets'])->name('tickets');
+    Route::get('/get-tickets', [HomeController::class, 'getTickets']);
     Route::get('/payments', [HomeController::class, 'payments'])->name('payments');
     Route::get('/account', [HomeController::class, 'account'])->name('account');
 
@@ -73,10 +76,12 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
     Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 
     Route::middleware('auth:admin')->group(function () {
-        Route::view('/', 'admin.home')->name('home');
+        Route::get('/', [HomeControllerAlias::class, 'index'])->name('home');
         //users
         Route::get('/users/staff', [UsersController::class, 'staff'])->name('staff');
         Route::get('/users/customers', [UsersController::class, 'users'])->name('users');
+        Route::get('/get-staff', [UsersController::class, 'getStaff']);
+        Route::get('/get-users', [UsersController::class, 'getUsers']);
         //events
         Route::get('/events', [EventsController::class, 'index'])->name('events');
         Route::get('/get-events', [EventsController::class, 'getEvents']);
@@ -86,6 +91,9 @@ Route::prefix('/admin')->name('admin.')->namespace('Admin')->group(function () {
         Route::post('/update-event/{id}', [EventsController::class, 'updateEvent']);
         Route::get('/view-event/{id}', [EventsController::class, 'viewEvent']);
         Route::get('/delete-event/{id}', [EventsController::class, 'deleteEvent']);
+
+        //tickets
+        Route::get('/get-tickets/{id}', [TicketController::class, 'getTickets']);
 
         //ticket pricing
         Route::get('/ticket-prices/{id}', [TicketPricingController::class, 'index']);

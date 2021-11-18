@@ -25,14 +25,21 @@
                     <div class="card">
                         <div class="card-body text-center">
                             <span class="mr-2" style="font-size: 20px"><span
-                                    class="font-weight-bold text-success">Location:</span> {{$event->location}}</span>
+                                    class="font-weight-bold text-success">Location:</span> {{\App\Models\Location::find($event->location)->name}}</span>
                             <span class="mr-2" style="font-size: 20px"><span class="font-weight-bold text-success">Venue:</span> {{$event->venue}}</span>
                             <span class="mr-2" style="font-size: 20px"><span class="font-weight-bold text-success">Duration:</span> {{$event->duration}} hrs</span>
                         </div>
                     </div>
                 </div>
             </div>
-           <ticket-reservation :event="{{$event}}"></ticket-reservation>
+            <customer-ticket-pricing :event="{{$event}}"></customer-ticket-pricing>
+            @auth()
+                <ticket-reservation :event="{{$event}}"></ticket-reservation>
+            @else
+               <div style="margin-top: 20px">
+                   <a class="btn btn-success btn-block my-5" href="{{route('login')}}">Login to make a reservation</a>
+               </div>
+            @endauth
         </div>
     </section>
 @endsection

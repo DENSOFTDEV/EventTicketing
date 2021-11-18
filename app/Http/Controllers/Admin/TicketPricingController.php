@@ -90,4 +90,5 @@ class TicketPricingController extends Controller
         return $this->showone($ticketPricing);
 
     }
+
 }

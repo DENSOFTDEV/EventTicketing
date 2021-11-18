@@ -5,7 +5,7 @@
             <p>Payments</p>
         </div>
         <div class="card-body">
-            <p>Card body</p>
+            <p>No Payments found</p>
         </div>
     </div>
 @endsection

@@ -5,7 +5,7 @@
             <p>Tickets</p>
         </div>
         <div class="card-body">
-            <p>Card body</p>
+            <customer-tickets></customer-tickets>
         </div>
     </div>
 @endsection
