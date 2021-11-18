@@ -5,7 +5,7 @@
             <p>Dashboard</p>
         </div>
         <div class="card-body">
-            <p>Card body</p>
+            <p>Welcome {{ucwords(\Illuminate\Support\Facades\Auth::user()->name)}}</p>
         </div>
     </div>
 @endsection

@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\TicketPricingController;
 use App\Http\Controllers\Admin\TicketTypeController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\CustomersEventController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,17 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
+Route::get('/about-us', function () {
+    return view('about-us');
+})->name('about-us');
+
+Route::get('/contact', function () {
+    return view('contact-us');
+})->name('contact-us');
+
+Route::get('/events', [CustomersEventController::class, 'getEvents']);
+Route::get('/event/{id}', [CustomersEventController::class, 'showEvent'])->name('event-details');
+
 Auth::routes();
 
 
@@ -38,6 +50,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/tickets', [HomeController::class, 'tickets'])->name('tickets');
     Route::get('/payments', [HomeController::class, 'payments'])->name('payments');
     Route::get('/account', [HomeController::class, 'account'])->name('account');
+
+    Route::post('reserve-ticket/{id}', [CustomersEventController::class, 'reserveTicket']);
 });
 
 

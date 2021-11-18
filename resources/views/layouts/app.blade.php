@@ -26,7 +26,25 @@
         }
 
         #content-wrap {
-            padding-bottom: 100px;    /* Footer height */
+            padding-bottom: 100px; /* Footer height */
+        }
+
+
+        .banner {
+            background-size: cover;
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            align-items: center;
+            position: relative;
+            background-position: center;
+        }
+
+        .content {
+            background: rgb(0, 0, 0); /* Fallback color */
+            background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
+            color: #f1f1f1; /* Grey text */
+            width: 100%; /* Full width */
         }
 
         #footer {
@@ -53,8 +71,8 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
                     <li class="nav-item"><a class="nav-link {{ (request()->is('/')) ? 'active' : '' }}"
                                             aria-current="page" href="{{route('welcome')}}">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#!">Contact Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{route('about-us')}}">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{route('contact-us')}}">Contact Us</a></li>
                 </ul>
                 <form class="d-flex">
                     @guest
@@ -92,10 +110,10 @@
             </div>
         </div>
     </nav>
-<div id="content-wrap">
-    @yield('content')
-</div>
-<!-- Footer-->
+    <div id="content-wrap">
+        @yield('content')
+    </div>
+    <!-- Footer-->
     <footer id="footer" class="footer mt-auto py-5 bg-dark">
         <div class="container"><p class="m-0 text-center text-white">Copyright &copy; {{config('app.name')}} 2021</p>
         </div>
