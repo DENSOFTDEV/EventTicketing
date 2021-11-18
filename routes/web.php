@@ -32,7 +32,13 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
+    Route::get('/tickets', [HomeController::class, 'tickets'])->name('tickets');
+    Route::get('/payments', [HomeController::class, 'payments'])->name('payments');
+    Route::get('/account', [HomeController::class, 'account'])->name('account');
+});
 
 
 //admin routes

@@ -36,10 +36,10 @@ Vue.component("ValidationObserver", ValidationObserver);
 Vue.component("ValidationProvider", ValidationProvider)
 
 
-import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css';
-import locale from 'element-ui/lib/locale/lang/en'
-Vue.use(ElementUI, {locale});
+// import ElementUI from 'element-ui'
+// import 'element-ui/lib/theme-chalk/index.css';
+// import locale from 'element-ui/lib/locale/lang/en'
+// Vue.use(ElementUI, {locale});
 
 
 import moment from 'moment'
