@@ -36,7 +36,7 @@
                     </div>
                 </div>
             </div>
-            <div class="text-center">
+            <div class="text-center mb-5">
                 <h3>No Events found <span class="far fa-sad-tear fa-3x text-success"></span></h3>
             </div>
         </div>
