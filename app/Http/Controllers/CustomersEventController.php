@@ -31,7 +31,7 @@ class CustomersEventController extends Controller
         });
 
 
-        return $this->showall($events);
+        return $this->showall($filteredEvents);
 
     }
 
