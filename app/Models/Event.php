@@ -11,7 +11,7 @@ class Event extends Model
     use HasFactory;
 
 
-    protected $appends = ['poster_url', 'large_poster_url'];
+    protected $appends = ['poster_url', 'large_poster_url','full_date_time'];
 
     protected $hidden = ['poster', 'large_poster'];
 
@@ -39,5 +39,10 @@ class Event extends Model
 
         return Storage::disk('s3')->url($this->large_poster);
 
+    }
+
+    public function getFullDateTimeAttribute()
+    {
+        return "{$this->happening_date} {$this->happening_time}";
     }
 }

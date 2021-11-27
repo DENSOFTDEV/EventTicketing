@@ -9,6 +9,7 @@ use App\Models\TicketType;
 use App\Notifications\TicketReservation;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -20,6 +21,14 @@ class CustomersEventController extends Controller
     public function getEvents()
     {
         $events = Event::with('location', 'ticket_prices.ticket')->get();
+
+        //filter past dates
+        $events = $events->filter(function ($event) {
+            $full_date_time = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', "{$event->happening_date} {$event->happening_time}");
+            if ($full_date_time->isFuture()) {
+                return $event;
+            }
+        });
 
         return $this->showall($events);
 
