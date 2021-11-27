@@ -28,7 +28,7 @@ class CustomersEventController extends Controller
             if ($full_date_time->isFuture()) {
                 return $event;
             }
-        });
+        })->values();
 
 
         return $this->showall($filteredEvents);
