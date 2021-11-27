@@ -23,16 +23,15 @@ class CustomersEventController extends Controller
         $events = Event::with('location', 'ticket_prices.ticket')->get();
 
         //filter past dates
-        $events = $events->filter(function ($event) {
+        $filteredEvents = $events->filter(function ($event) {
             $full_date_time = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', "{$event->happening_date} {$event->happening_time}");
             if ($full_date_time->isFuture()) {
                 return $event;
             }
         });
 
-        $events->all();
 
-        return $this->showall($events);
+        return $this->showall($filteredEvents);
 
     }
 
