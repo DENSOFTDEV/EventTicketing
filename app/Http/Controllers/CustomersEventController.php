@@ -30,6 +30,8 @@ class CustomersEventController extends Controller
             }
         });
 
+        $events->all();
+
         return $this->showall($events);
 
     }
